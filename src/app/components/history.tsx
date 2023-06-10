@@ -5,36 +5,16 @@ import React, { useEffect, useState } from 'react';
 import { getAmountWithDecimal, retrieveImage } from "@/utils/tokens.utils";
 import Image from 'next/image';
 import { capitalizeFirstLetter } from "@/utils/global.utils";
+import { fetchTransactions } from "@/lib/trxs";
 
 interface HistoryProps {
-  address: string;
+  loading: boolean;
+  transactions?: Transaction[];
 }
 
 
-export default function History({ address }: HistoryProps) {
-  const [transactions, setTransactions] = useState<Transaction[]>();
-  const [loading, setLoading] = useState<boolean>(true);
-  const getTransactions = async (walletAddress) => {
-    const request = {
-      accountAddress: walletAddress
-    }
+export default function History({ loading, transactions }: HistoryProps) {
 
-
-    const response = await axios.post<any>('/api/transactions', request, {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json'
-      }
-    },);
-    setTransactions(response.data);
-    setLoading(false);
-  }
-  useEffect(() => {
-    if (address) {
-      setLoading(true);
-      getTransactions(address);
-    }
-  }, [address])
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
 

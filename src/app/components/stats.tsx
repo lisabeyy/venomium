@@ -1,8 +1,12 @@
-import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/20/solid'
+import { ArrowDownIcon, ArrowUpIcon, WalletIcon } from '@heroicons/react/20/solid'
 import { CurrencyDollarIcon, ClockIcon } from '@heroicons/react/24/outline'
 import LineChart from './chart';
 import History from './history';
-
+import { Transaction } from '../types/transactions.type';
+import React, { useEffect, useState } from 'react';
+import { fetchAssets, fetchTransactions } from '@/lib/trxs';
+import { retrieveImage } from '@/utils/tokens.utils';
+import Image from 'next/image';
 const stats = [
   { id: 1, name: 'Wallet', stat: '35.20$', icon: CurrencyDollarIcon, change: '2.3%', changeType: 'increase', colSpan: true, chart: true },
   { id: 2, stat: 'History', icon: ClockIcon, change: '', changeType: '', colSpan: false, history: true },]
@@ -16,6 +20,32 @@ interface StatsProps {
 }
 
 export default function Stats({ address }: StatsProps) {
+
+  const [transactions, setTransactions] = useState<Transaction[]>();
+  const [tokensBalance, setTokensBalance] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [loadingAsset, setLoadingAsset] = useState<boolean>(true);
+  const getAssets = async (walletAddress) => {
+
+    const tokens = await fetchAssets(walletAddress);
+    console.log('tokens', tokens);
+    setTokensBalance(tokens);
+    setLoadingAsset(false);
+  }
+  const getTransactions = async (walletAddress) => {
+
+    const trxs = await fetchTransactions(walletAddress);
+    setTransactions(trxs);
+    setLoading(false);
+  }
+  useEffect(() => {
+    if (address) {
+      setLoading(true);
+      getTransactions(address);
+      getAssets(address);
+    }
+  }, [address])
+
   return (
     <>
       <h3 className="text-base font-semibold leading-6 text-gray-900">Last 30 days</h3>
@@ -28,7 +58,7 @@ export default function Stats({ address }: StatsProps) {
           >
             <>
               <dt>
-                <div className="absolute rounded-md bg-indigo-500 p-3">
+                <div className="absolute rounded-md bg-[#05ED9F] p-3">
                   <item.icon className="h-6 w-6 text-white" aria-hidden="true" />
                 </div>
                 {item.name &&
@@ -66,20 +96,20 @@ export default function Stats({ address }: StatsProps) {
             <>
               {item.chart &&
                 <div className='w-full'>
-                  <LineChart lineColor={item.changeType === 'increase' ? 'green' : 'red'} />
+                  <LineChart loading={loading} transactions={transactions} lineColor={item.changeType === 'increase' ? 'green' : 'red'} />
                 </div>
               }
 
               {item.history &&
                 <div className='w-full'>
-                  <History address={address}/>
+                  <History loading={loading} transactions={transactions} />
                 </div>
               }
 
 
               <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
                 <div className="text-sm">
-                  <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+                  <a href="#" className="font-medium hover:text-[#05ED9F] text-black">
                     View all<span className="sr-only"> {item.name} stats</span>
                   </a>
                 </div>
@@ -88,6 +118,72 @@ export default function Stats({ address }: StatsProps) {
 
           </div>
         ))}
+      </dl>
+
+      <dl className="mt-5 grid grid-cols-1 gap-5">
+        <div
+          className='relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6'
+        >
+          <dt>
+            <div className="absolute rounded-md bg-[#05ED9F] p-3">
+              <WalletIcon className="h-6 w-6 text-white" aria-hidden="true" />
+            </div>
+            <p className="ml-16 truncate text-sm font-medium text-gray-500">Portfolio</p>
+          </dt>
+
+          <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
+            <p className="text-2xl font-semibold text-gray-900">Assets</p>
+
+
+
+
+          </dd>
+
+          <div className="mt-8 flow-root w-full">
+            <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+              <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                {transactions && transactions.length > 0 &&
+
+                  <table className="min-w-full divide-y divide-gray-300">
+                    <thead>
+                      <tr>
+                        <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+                          Asset
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          Price
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          Balance
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          Value
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {tokensBalance.map((t) => (
+                        <tr key={t.token}>
+                          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                            <Image className="rounded-full" width={24} height={24} src={retrieveImage(t.token)} alt="" />
+                            {t.token}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{t.amount}</td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">x</td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">x</td>
+
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                }
+
+              </div>
+            </div>
+          </div>
+
+
+        </div>
       </dl>
     </>
   )

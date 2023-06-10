@@ -11,6 +11,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import BtcData from '../../assets/btcdata.json';
+import { Transaction } from '../types/transactions.type';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -59,29 +60,45 @@ export const options = {
 
 interface LineChartProps {
   lineColor: string;
+  loading: boolean;
+  transactions?: Transaction[];
 }
 
 const LineChart: FC<LineChartProps> = ({
-  lineColor
+  lineColor,
+  loading,
+  transactions
 }) => {
 
+  let data;
 
-  const data = {
-    labels: BtcData.map((t) => ''),
-    tension: 1,
-    datasets: [
-      {
-        label: '',
-        data: BtcData.map((t) => t[1]),
-        borderColor: lineColor,
-        borderWidth: 1,
-        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-      },
-  
-    ],
-  };
-  
-  return <Line options={options} data={data} color={lineColor}/>;
+  if (transactions) {
+    data = {
+      labels: transactions.map((t) => new Date(t.blockTime * 1000).toLocaleDateString()),
+      tension: 1,
+      datasets: [
+        {
+          label: '',
+          data: transactions.map((t) => t.amount),
+          borderColor: lineColor,
+          borderWidth: 1,
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+        },
+
+      ],
+    };
+
+  }
+
+
+  return (
+    <>
+      {data && data.labels &&
+        <Line options={options} data={data} color={lineColor} />
+      }
+    </>
+
+  );
 }
 
 

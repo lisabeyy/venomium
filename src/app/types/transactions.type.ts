@@ -26,3 +26,14 @@ export interface Transaction {
   blockTime: number;
   imageUrl?: string;
 }
+
+
+
+export interface Token {
+  amount: string;
+  blockTime: number;
+  ownerAddress: string;
+  rootAddress: string;
+  token: string;
+  tokenStandard: string;
+}
