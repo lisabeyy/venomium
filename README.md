@@ -1,8 +1,8 @@
-# Venom In Action - Tokensale frontend
+# Venom Hackaton - Wallet Tracker 
 
-> This repository was built for [Venom In Action. Extend our Tokensale with frontend](https://docs.venom.foundation/build/development-guides/how-to-create-your-own-fungible-tip-3-token/venom-in-action/extend-our-tokensale-with-frontend) guide of [How to create your own fungible TIP-3 token](https://docs.venom.foundation/build/development-guides/how-to-create-your-own-fungible-tip-3-token) series.
+> This repository was built for Venom Hackaton.
 
-This project is a sample, designed to help you to sort out smart contract interaction with web interface usage. We didn't keep in mind some balance loaders, wallet callbacks and state managers here.
+This project is a only available for testnet data and use testnet API from VenomScan:
 
 >! Not ready for production
 
