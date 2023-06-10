@@ -82,6 +82,10 @@ export default function Home() {
     setAddress('');
   };
 
+  const handleResultClick = (address: string) => {
+    console.log('address to set', address);
+    setAddress('0:'+ address);
+  }
 
 
   // When our provider is ready, we need to get address and balance from.
@@ -304,7 +308,7 @@ export default function Home() {
 
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
               <div className="relative flex flex-1">
-                <SearchAccount /> 
+                <SearchAccount onResultClick={handleResultClick}/> 
               </div>
               <div className="flex items-center gap-x-4 lg:gap-x-6">
                 <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
