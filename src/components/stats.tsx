@@ -43,7 +43,7 @@ export default function Stats({ address }: StatsProps) {
     const lastVenomTrxAmount = +venomTrxs[venomTrxs.length - 1].amount / (10 ** 9);
     
    const percentageChange = ((lastVenomTrxAmount - firstVenomTrxAmount) / firstVenomTrxAmount) * 100
-   stats[0].change = (percentageChange > 0 ? '+' : '-') + percentageChange.toFixed(2).toString() + ' %';
+   stats[0].change = (percentageChange > 0 ? '+' : '') + percentageChange.toFixed(2).toString() + ' %';
    stats[0].changeType = percentageChange > 0 ? 'increase' : 'decrease';
     setTransactions(trxs);
     setLoading(false);
