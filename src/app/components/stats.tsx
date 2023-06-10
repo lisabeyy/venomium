@@ -11,7 +11,11 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Stats() {
+interface StatsProps {
+  address: string;
+}
+
+export default function Stats({ address }: StatsProps) {
   return (
     <>
       <h3 className="text-base font-semibold leading-6 text-gray-900">Last 30 days</h3>
@@ -68,7 +72,7 @@ export default function Stats() {
 
               {item.history &&
                 <div className='w-full'>
-                  <History />
+                  <History address={address}/>
                 </div>
               }
 

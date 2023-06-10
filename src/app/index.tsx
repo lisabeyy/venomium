@@ -1,15 +1,11 @@
 "use client";
-
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   Bars3Icon,
   BellIcon,
-  CalendarIcon,
-  ChartPieIcon,
   UserCircleIcon,
   Cog6ToothIcon,
-  DocumentDuplicateIcon,
   FolderIcon,
   WalletIcon,
   HomeIcon,
@@ -23,6 +19,7 @@ import { initVenomConnect } from '../lib/venom';
 
 import VenomConnect from 'venom-connect';
 import ConnectWallet from './components/connectWallet';
+
 
 const navigation = [
   { name: 'My Wallet', href: '#', icon: HomeIcon, current: true },
@@ -43,9 +40,22 @@ function classNames(...classes) {
 }
 
 
+const tokens = [
+  { ticker: 'USDT', decimals: 6, address: '0:20470e6a6e33aa696263b5702608d69e3317c23bf20c2f921b38d6588c555603' },
+  { ticker: 'NUMI', decimals: 9, address: '0:c45801ac28c32ffcea225450cb6c1b94686115d6b74787feb9c6d5701cb84399' },
+  { ticker: 'wVenom', decimals: 6, address: '0:2c3a2ff6443af741ce653ae4ef2c85c2d52a9df84944bbe14d702c3131da3f14' },
+  { ticker: 'W3W', decimals: 9, address: '0:fbe9fbbbba9f945cb56f1a64276199e5221d9d7170cc785e0579f9a1bb5c1e9b' },
+  { ticker: 'USDC', decimals: 6, address: '0:85ef6d4574ba9705ebde989d500e414640286d93df4a77844c8b295a9ea3e5c5' }
+];
+
 
 export default function Home() {
+  // We will store token balance from contract
 
+
+
+  const [venomProvider, setVenomProvider] = useState<any>();
+  const [address, setAddress] = useState<string>('');
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [venomConnect, setVenomConnect] = useState<VenomConnect | undefined>();
   const init = async () => {
@@ -56,11 +66,12 @@ export default function Home() {
     init();
   }, []);
 
-  const [venomProvider, setVenomProvider] = useState<any>();
-  const [address, setAddress] = useState<string>('');
+
+
   // This method allows us to gen a wallet address from inpage provider
   const getAddress = async (provider: any) => {
     const providerState = await provider?.getProviderState?.();
+    console.log('providerState', providerState)
     return providerState?.permissions.accountInteraction?.address.toString();
   };
   // Any interaction with venom-wallet (address fetching is included) needs to be authentificated
@@ -75,11 +86,14 @@ export default function Home() {
     await onProviderReady(provider);
   };
   // This handler will be called after venomConnect.disconnect() action
-  // By click logout. We need to reset address and balance.
+
   const onDisconnect = async () => {
     venomProvider?.disconnect();
     setAddress('');
   };
+
+
+
   // When our provider is ready, we need to get address and balance from.
   const onProviderReady = async (provider: any) => {
     const venomWalletAddress = provider ? await getAddress(provider) : undefined;
@@ -104,8 +118,8 @@ export default function Home() {
         This example requires updating your template:
 
         ```
-        <html class="h-full bg-white">
-        <body class="h-full">
+        <htmlclassName="h-full bg-white">
+        <bodyclassName="h-full">
         ```
       */}
       <div className='h-full'>
@@ -153,11 +167,11 @@ export default function Home() {
                   {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10">
                     <div className="flex h-16 shrink-0 items-center">
-                      <img
-                        className="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                        alt="Your Company"
-                      />
+                    { /* logo venom */}
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"className="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
+                      </svg>
+
                     </div>
                     <nav className="flex flex-1 flex-col">
                       <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -227,11 +241,11 @@ export default function Home() {
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
             <div className="flex h-16 shrink-0 items-center">
-              <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                alt="Your Company"
-              />
+            { /* logo venom */}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"className="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
+              </svg>
+
             </div>
             <nav className="flex flex-1 flex-col">
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -337,7 +351,7 @@ export default function Home() {
                       <Menu.Button className="-m-1.5 flex items-center p-1.5">
                         <span className="sr-only">Open user menu</span>
                         <UserCircleIcon className="h-8 w-8 " color="green" />
-                        
+
                         <span className="hidden lg:flex lg:items-center">
                           <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
                             {address.slice(0, 6)}...{address.slice(-4)}
@@ -383,7 +397,7 @@ export default function Home() {
 
           <main className="py-10 bg-white h-full">
             <div className="px-4 sm:px-6 lg:px-8">
-              <Stats />
+              <Stats address={address} />
             </div>
           </main>
         </div>
