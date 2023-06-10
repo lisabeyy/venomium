@@ -4,7 +4,7 @@ import { Kind, Transaction } from "../types/transactions.type";
 import React, { useEffect, useState } from 'react';
 import { getAmountWithDecimal, retrieveImage } from "../utils/tokens.utils";
 import { capitalizeFirstLetter } from "../utils/global.utils";
-import { fetchTransactions } from "../lib/trxs";
+import { fetchTransactions } from "../lib/venomScanApi";
 import { IncomingMessage } from "http";
 
 interface HistoryProps {

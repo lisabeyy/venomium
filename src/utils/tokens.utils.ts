@@ -20,8 +20,6 @@ export function getAddressForToken(tokenSymbol) {
 
 export function retrieveImage(tokenSymbol) {
 
-console.log('tokenSymbol', tokenSymbol)
-
   const venomTokens = ['Venom', 'wVenom'];
   const testTokens = ['TUSDT'];
 
@@ -34,7 +32,6 @@ if (testTokens.includes(tokenSymbol)) {
     return 'https://cdn.venom.foundation/assets/testnet/icons/NUMI/logo.svg'
   }
   else {
-    console.log('token upp', tokenSymbol.toUpperCase())
     return `https://testnet.web3.world/token-icons/${
       tokenSymbol.toUpperCase()
     }.png`;

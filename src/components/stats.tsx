@@ -4,7 +4,7 @@ import LineChart from './chart';
 import History from './history';
 import { Transaction } from '../types/transactions.type';
 import React, { useEffect, useState } from 'react';
-import { fetchAssets, fetchTransactions } from '../lib/trxs';
+import { fetchAssets, fetchTransactions } from '../lib/venomScanApi';
 import { retrieveImage } from '../utils/tokens.utils';
 const stats = [
   { id: 1, name: 'Wallet', stat: '35.20$', icon: CurrencyDollarIcon, change: '2.3%', changeType: 'increase', colSpan: true, chart: true },
@@ -47,10 +47,10 @@ export default function Stats({ address }: StatsProps) {
   return (
     <>
 
-    {!address && <>
+      {!address && <>
 
-      <h3 className='text-black text-center mt-8'>Connect your wallet to start tracking your portfolio or search for a wallet address in the top bar.</h3>
-    </>}
+        <h3 className='text-black text-center mt-8'>Connect your wallet to start tracking your portfolio or search for a wallet address in the top bar.</h3>
+      </>}
       {address &&
         <>
           <h3 className="text-base font-semibold leading-6 text-gray-900">Last 30 days</h3>
@@ -173,10 +173,10 @@ export default function Stats({ address }: StatsProps) {
                               Asset
                             </th>
                             <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                            Balance
+                              Balance
                             </th>
                             <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                            Price
+                              Price
                             </th>
                             <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                               Value
@@ -184,18 +184,24 @@ export default function Stats({ address }: StatsProps) {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
-                          {tokensBalance.map((t) => (
-                            <tr key={t.token}>
-                              <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                                <img className="rounded-full" width={24} height={24} src={retrieveImage(t.token)} alt="" />
-                                {t.token}
-                              </td>
-                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{t.amount}</td>
-                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">x</td>
-                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">x</td>
+                          {tokensBalance &&
 
-                            </tr>
-                          ))}
+                            <>
+                              {tokensBalance.map((t) => (
+                                <tr key={t.token}>
+                                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                                    <img className="rounded-full" width={24} height={24} src={retrieveImage(t.token)} alt="" />
+                                    {t.token}
+                                  </td>
+                                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{t.amount}</td>
+                                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">x</td>
+                                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">x</td>
+
+                                </tr>
+                              ))}
+                            </>
+                          }
+
                         </tbody>
                       </table>
                     }

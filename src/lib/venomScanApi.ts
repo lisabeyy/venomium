@@ -39,6 +39,34 @@ const tokenBalanceReq = {
   "ordering": "amountdescending"
 }
 
+
+export async function searchAccount(searchString: string) {
+
+const req = {
+  query: searchString
+}
+try { // 👇️ const data: CreateUserResponse
+  const responseObj = await axios.post<any>(process.env.REACT_APP_VENOMSCAN_API + '/v1/search', req, {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json'
+    }
+  },);
+
+  return {status: 200, body: responseObj.data};
+
+} catch (error) {
+  if (axios.isAxiosError(error)) {
+    console.log('error message: ', error.message);
+    // 👇️ error: AxiosError<any, any>
+    return {status: 400, body: error.message};
+  } else {
+    console.log('unexpected error: ', error);
+    return {status: 400, body: 'An unexpected error occurred'};
+  }
+}
+}
+
 export async function fetchAssets(accountAddress: string) {
 
   const accountVenom = await GetAccount(accountAddress);
@@ -105,10 +133,10 @@ export async function fetchTransactions(accountAddress: string) {
 }
 
 
-async function GetTokenTrx(accountAddress: string, apiPath = process.env.VENOM_TOKEN_API): Promise<any> {
+async function GetTokenTrx(accountAddress: string): Promise<any> {
   trxRequest.ownerAddress = accountAddress;
   try { // 👇️ const data: CreateUserResponse
-    const responseObj = await axios.post<any>('https://testnet-tokens.venomscan.com/v1/transactions', trxRequest, {
+    const responseObj = await axios.post<any>(process.env.REACT_APP_VENOMSCAN_TOKEN_API + '/v1/transactions', trxRequest, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json'
@@ -130,10 +158,10 @@ async function GetTokenTrx(accountAddress: string, apiPath = process.env.VENOM_T
 
 }
 
-async function GetAccount(accountAddress: string, apiPath = process.env.VENOMSCAN_API): Promise<any> {
+async function GetAccount(accountAddress: string): Promise<any> {
   accRequest.id = accountAddress;
   try { // 👇️ const data: CreateUserResponse
-    const responseObj = await axios.post<any>('https://testnet-api.venomscan.com/v1/accounts', accRequest, {
+    const responseObj = await axios.post<any>(process.env.REACT_APP_VENOMSCAN_API + '/v1/accounts', accRequest, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json'
@@ -155,7 +183,7 @@ async function GetAccount(accountAddress: string, apiPath = process.env.VENOMSCA
 }
 
 
-  async function GetTokenBalance(accountAddress: string, apiPath = process.env.VENOMSCAN_TOKEN_API): Promise<any>{
+  async function GetTokenBalance(accountAddress: string): Promise<any>{
     
   tokenBalanceReq.ownerAddress = accountAddress;
   try { // 👇️ const data: CreateUserResponse
@@ -185,7 +213,7 @@ async function GetMessages(accountAddress: string): Promise<any> {
 
 
   try { // 👇️ const data: CreateUserResponse
-    const responseObj = await axios.post<any>('https://testnet-api.venomscan.com/v1/messages/list', msgRequest, {
+    const responseObj = await axios.post<any>(process.env.REACT_APP_VENOMSCAN_API + '/v1/messages/list', msgRequest, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json'
