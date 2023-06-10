@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import {NextApiRequest, NextApiResponse} from "next";
 import axios from "axios";
-import {Kind, Transaction} from "@/app/types/transactions.type";
+import {Kind, Transaction} from "@/types/transactions.type";
 import { fetchTransactions } from "@/lib/trxs";
 
 

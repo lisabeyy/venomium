@@ -10,7 +10,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import BtcData from '../../assets/btcdata.json';
+import BtcData from '../assets/btcdata.json';
 import { Transaction } from '../types/transactions.type';
 ChartJS.register(
   CategoryScale,

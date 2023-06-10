@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import { Kind, Transaction } from "@/app/types/transactions.type";
+import { Kind, Transaction } from "@/types/transactions.type";
 import React, { useEffect, useState } from 'react';
 import { getAmountWithDecimal, retrieveImage } from "@/utils/tokens.utils";
 import Image from 'next/image';
@@ -35,7 +35,7 @@ export default function History({ loading, transactions }: HistoryProps) {
 
       {transactions && !loading &&
         <>
-          {transactions.slice(0, 5).map((e) => (
+          {transactions.map((e) => (
             <div
               key={e.blockTime + '' + e.token + '' + e.amount}
               className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-4 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"

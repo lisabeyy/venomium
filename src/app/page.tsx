@@ -13,13 +13,13 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import Stats from './components/stats';
+import Stats from './stats';
 
 import { initVenomConnect } from '../lib/venom';
 import  Logo  from '../assets/logo_venomium.svg';
 import  ConnectedIcon  from '../assets/connected.svg';
 import VenomConnect from 'venom-connect';
-import ConnectWallet from './components/connectWallet';
+import ConnectWallet from './connectWallet';
 import Image from 'next/image';
 
 const navigation = [
