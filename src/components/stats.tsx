@@ -7,6 +7,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react'
 import { fetchAssets, fetchTransactions } from '../lib/venomScanApi';
 import { getAmountWithDecimal, retrieveImage } from '../utils/tokens.utils';
+import  Logo  from '../assets/logo_venomium.svg';
 let stats = [
   { id: 1, name: 'Wallet', stat: '', icon: CurrencyDollarIcon, change: '', changeType: '', colSpan: true, chart: true },
   { id: 2, stat: 'History', icon: ClockIcon, change: '', changeType: '', colSpan: false, history: true },]
@@ -123,7 +124,8 @@ export default function Stats({ address, userAddress }: StatsProps) {
 
       {!address && <>
 
-        <h3 className='text-black text-center mt-8'>Connect your wallet to start tracking your portfolio or search for a wallet address in the top bar.</h3>
+        <h1 className='text-gray-800 mt-8 mb-8 text-center'>Welcome to  <img src={Logo} className="inline" width={120} alt="logo "/></h1>
+        <h2 className='text-black text-center mt-8'>Connect your wallet to start tracking your portfolio or search for a wallet address in the top bar.</h2>
       </>}
       {address &&
         <>
