@@ -324,7 +324,7 @@ export default function Home() {
 
                 {/* Profile dropdown */}
 
-                {address && (
+                {userAddress && (
                   <>
 
                     <Menu as="div" className="relative">
@@ -335,7 +335,7 @@ export default function Home() {
 
                         <span className="hidden lg:flex lg:items-center">
                           <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
-                            {address.slice(0, 6)}...{address.slice(-4)}
+                            {userAddress.slice(0, 6)}...{userAddress.slice(-4)}
                           </span>
                           <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
                         </span>
