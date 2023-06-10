@@ -25,7 +25,7 @@ export const options = {
   responsive: true,
   elements: {
     point: {
-      radius: 0
+      radius: 0.8
     }
   },
   scales: {
@@ -72,13 +72,15 @@ const LineChart: FC<LineChartProps> = ({
   let data;
 
   if (transactions) {
+    const venomTrxs= transactions.filter(t =>  t.token == 'Venom');
+
     data = {
-      labels: transactions.map((t) => new Date(t.blockTime * 1000).toLocaleDateString()),
+      labels: venomTrxs.map((t) => new Date(t.blockTime).toLocaleDateString()),
       tension: 1,
       datasets: [
         {
           label: '',
-          data: transactions.map((t) => t.amount),
+          data: venomTrxs.map((t) => +t.amount  / (10 ** 9)),
           borderColor: lineColor,
           borderWidth: 1,
           backgroundColor: 'rgba(255, 255, 255, 0.5)',

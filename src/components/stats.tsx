@@ -5,9 +5,9 @@ import History from './history';
 import { Transaction } from '../types/transactions.type';
 import React, { useEffect, useState } from 'react';
 import { fetchAssets, fetchTransactions } from '../lib/venomScanApi';
-import { retrieveImage } from '../utils/tokens.utils';
-const stats = [
-  { id: 1, name: 'Wallet', stat: '35.20$', icon: CurrencyDollarIcon, change: '2.3%', changeType: 'increase', colSpan: true, chart: true },
+import { getAmountWithDecimal, retrieveImage } from '../utils/tokens.utils';
+let stats = [
+  { id: 1, name: 'Wallet', stat: '', icon: CurrencyDollarIcon, change: '', changeType: '', colSpan: true, chart: true },
   { id: 2, stat: 'History', icon: ClockIcon, change: '', changeType: '', colSpan: false, history: true },]
 
 function classNames(...classes) {
@@ -27,12 +27,24 @@ export default function Stats({ address }: StatsProps) {
   const getAssets = async (walletAddress) => {
 
     const tokens = await fetchAssets(walletAddress);
+    const venomBalance = tokens.find(t =>  t.token == 'Venom');
+    console.log('venombalance', venomBalance);
+    if (venomBalance) {
+      stats[0].stat = (+venomBalance?.amount / (10 ** 9)).toString();
+    }
     setTokensBalance(tokens);
     setLoadingAsset(false);
   }
   const getTransactions = async (walletAddress) => {
 
     const trxs = await fetchTransactions(walletAddress);
+    const venomTrxs= trxs.filter(t =>  t.token == 'Venom');
+    const firstVenomTrxAmount = +venomTrxs[0].amount / (10 ** 9);
+    const lastVenomTrxAmount = +venomTrxs[venomTrxs.length - 1].amount / (10 ** 9);
+    
+   const percentageChange = ((lastVenomTrxAmount - firstVenomTrxAmount) / firstVenomTrxAmount) * 100
+   stats[0].change = (percentageChange > 0 ? '+' : '-') + percentageChange.toFixed(2).toString() + ' %';
+   stats[0].changeType = percentageChange > 0 ? 'increase' : 'decrease';
     setTransactions(trxs);
     setLoading(false);
   }
@@ -82,7 +94,13 @@ export default function Stats({ address }: StatsProps) {
 
                     <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
                       {item.stat &&
-                        <p className="text-2xl font-semibold text-gray-900">{item.stat}</p>
+                        <p className="text-2xl font-semibold text-gray-900">
+                        
+                         <span> {item.stat}</span>
+                         {item.chart && 
+                            <img className="rounded-full inline ml-2 mb-1" width={24} height={24} src={retrieveImage('Venom')} alt="" />
+                          }
+                          </p>
                       }
 
                       {item.change &&
@@ -189,11 +207,11 @@ export default function Stats({ address }: StatsProps) {
                             <>
                               {tokensBalance.map((t) => (
                                 <tr key={t.token}>
-                                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                                  <td className="whitespace-nowrap flex-row py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
                                     <img className="rounded-full" width={24} height={24} src={retrieveImage(t.token)} alt="" />
-                                    {t.token}
+                                   <span>{t.token}</span> 
                                   </td>
-                                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{t.amount}</td>
+                                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{getAmountWithDecimal(+t.amount, t.token)}</td>
                                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">x</td>
                                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">x</td>
 

@@ -11,14 +11,19 @@ import {
 export default function SearchAccount() {
   const [searchTerm, setSearchTerm] = useState('');
   const [addressSelected, setAddressSelected] = useState('');
-  
+
   const [loading, setLoading] = useState(false);
+  const [showNoResultMsg, setShowNoResultMsg] = useState(false);
   const [results, setResults] = useState<any>(null);
   const autocompleteRef = useRef<HTMLDivElement>(null);
+
   const fetchResult = async () => {
     setLoading(true);
     const result = await searchAccount(searchTerm);
     console.log('search result', result);
+    if (result.body.length < 1 && result.status == 200) {
+      setShowNoResultMsg(true);
+    }
     setResults(result.body);
     setLoading(false);
   };
@@ -53,12 +58,14 @@ export default function SearchAccount() {
     setSearchTerm('');
     setAddressSelected('');
     setResults([]);
+    setShowNoResultMsg(false);
     setLoading(false);
   };
 
   const handleClickOutside = (event) => {
     if (autocompleteRef.current && !autocompleteRef.current.contains(event.target)) {
       setLoading(false);
+      setShowNoResultMsg(false);
       setResults([]);
     }
   };
@@ -67,7 +74,8 @@ export default function SearchAccount() {
   const handleResultClick = (account) => {
     setAddressSelected(account.data.address);
     setLoading(false);
-      setResults([]);
+    setShowNoResultMsg(false);
+    setResults([]);
     // Launch the getAccount function with the selected account
     // getAccount(account);
   };
@@ -75,27 +83,37 @@ export default function SearchAccount() {
   return (
     <div ref={autocompleteRef} className='container mx-auto mt-4 text-black'>
       <div className='relative'>
-      <input
-        type="text"
-        value={addressSelected ?  addressSelected : searchTerm}
-        onChange={handleSearch}
-        placeholder="Search for an account"
-        className="px-4 py-2 text-gray-800 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-      />
-      {searchTerm.length > 0 && (
+        <input
+          type="text"
+          value={addressSelected ? addressSelected : searchTerm}
+          onChange={handleSearch}
+          placeholder="Search for an account"
+          className="px-4 py-2 text-gray-800 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+        />
+        {searchTerm.length > 0 && (
           <button
             onClick={handleCloseResults}
             className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
           >
-            <XCircleIcon  className="h-4 w-4" />
+            <XCircleIcon className="h-4 w-4" />
           </button>
         )}
       </div>
-   
+
       {loading &&
         <ul className="absolute z-10 w-full overflow-y-auto bg-white border border-gray-300 rounded-md mt-1">
           <li className='px-4 py-4'>
             <span>Loading...</span>
+
+          </li>
+        </ul>
+      }
+
+
+      {showNoResultMsg &&
+        <ul className="absolute z-10 w-full overflow-y-auto bg-white border border-gray-300 rounded-md mt-1">
+          <li className='px-4 py-4'>
+            <span>No account found</span>
 
           </li>
         </ul>
@@ -109,11 +127,11 @@ export default function SearchAccount() {
               className="px-4 py-2 cursor-pointer hover:bg-gray-100"
             >
               <span className="w-fill flex ">
-              <UserCircleIcon className="h-5 w-5 mr-2" aria-hidden="true"/> {result.data.address}
-                </span>
+                <UserCircleIcon color='#05ED9F' className="h-5 w-5 mr-2" aria-hidden="true" /> {result.data.address}
+              </span>
             </li>
           ))}
-         
+
         </div>
       )}
     </div>
