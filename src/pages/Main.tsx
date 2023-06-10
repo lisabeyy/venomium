@@ -46,6 +46,7 @@ export default function Home() {
   const [searchAddressQuery, setSearchAddressQuery] = useState('');
   const [venomProvider, setVenomProvider] = useState<any>();
   const [address, setAddress] = useState<string>('');
+  const [userAddress, setUserAddress] = useState<string>('');
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [venomConnect, setVenomConnect] = useState<VenomConnect | undefined>();
   const init = async () => {
@@ -80,6 +81,7 @@ export default function Home() {
   const onDisconnect = async () => {
     venomProvider?.disconnect();
     setAddress('');
+    setUserAddress('');
   };
 
   const handleResultClick = (address: string) => {
@@ -92,6 +94,7 @@ export default function Home() {
   const onProviderReady = async (provider: any) => {
     const venomWalletAddress = provider ? await getAddress(provider) : undefined;
     setAddress(venomWalletAddress);
+    setUserAddress(venomWalletAddress);
   };
   useEffect(() => {
     // connect event handler
@@ -375,7 +378,7 @@ export default function Home() {
 
           <main className="py-10 bg-white h-full overflow-y-scroll">
             <div className="px-4 sm:px-6 lg:px-8">
-              <Stats address={address} />
+              <Stats address={address} userAddress={userAddress}/>
             </div>
           </main>
         </div>
