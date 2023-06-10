@@ -208,7 +208,7 @@ export default function Stats({ address }: StatsProps) {
                               {tokensBalance.map((t) => (
                                 <tr key={t.token}>
                                   <td className="whitespace-nowrap flex-row py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                                    <img className="rounded-full" width={24} height={24} src={retrieveImage(t.token)} alt="" />
+                                    <img className="rounded-full inline mr-2" width={24} height={24} src={retrieveImage(t.token)} alt="" />
                                    <span>{t.token}</span> 
                                   </td>
                                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{getAmountWithDecimal(+t.amount, t.token)}</td>
