@@ -4,9 +4,8 @@ import LineChart from './chart';
 import History from './history';
 import { Transaction } from '../types/transactions.type';
 import React, { useEffect, useState } from 'react';
-import { fetchAssets, fetchTransactions } from '@/lib/trxs';
-import { retrieveImage } from '@/utils/tokens.utils';
-import Image from 'next/image';
+import { fetchAssets, fetchTransactions } from '../lib/trxs';
+import { retrieveImage } from '../utils/tokens.utils';
 const stats = [
   { id: 1, name: 'Wallet', stat: '35.20$', icon: CurrencyDollarIcon, change: '2.3%', changeType: 'increase', colSpan: true, chart: true },
   { id: 2, stat: 'History', icon: ClockIcon, change: '', changeType: '', colSpan: false, history: true },]
@@ -188,7 +187,7 @@ export default function Stats({ address }: StatsProps) {
                           {tokensBalance.map((t) => (
                             <tr key={t.token}>
                               <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                                <Image className="rounded-full" width={24} height={24} src={retrieveImage(t.token)} alt="" />
+                                <img className="rounded-full" width={24} height={24} src={retrieveImage(t.token)} alt="" />
                                 {t.token}
                               </td>
                               <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{t.amount}</td>

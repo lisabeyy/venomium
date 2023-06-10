@@ -1,4 +1,3 @@
-"use client";
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
@@ -20,7 +19,6 @@ import  Logo  from '../assets/logo_venomium.svg';
 import  ConnectedIcon  from '../assets/connected.svg';
 import VenomConnect from 'venom-connect';
 import ConnectWallet from './connectWallet';
-import Image from 'next/image';
 
 const navigation = [
   { name: 'My Wallet', href: '#', icon: HomeIcon, current: true },
@@ -44,7 +42,7 @@ export default function Home() {
   // We will store token balance from contract
 
 
-
+  const [searchAddressQuery, setSearchAddressQuery] = useState('');
   const [venomProvider, setVenomProvider] = useState<any>();
   const [address, setAddress] = useState<string>('');
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -159,7 +157,7 @@ export default function Home() {
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10">
                     <div className="flex h-16 shrink-0 items-center">
                     {/* logo venom */}
-                  <Image src={Logo} width={100} alt="logo "/>
+                  <img src={Logo} width={100} alt="logo "/>
                     </div>
                     <nav className="flex flex-1 flex-col">
                       <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -230,7 +228,7 @@ export default function Home() {
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
             <div className="flex h-16 shrink-0 items-center">
             { /* logo venom */}
-            <Image src={Logo} width={100} alt="logo "/>
+            <img src={Logo} width={100} alt="logo "/>
 
 
             </div>
@@ -316,6 +314,7 @@ export default function Home() {
                   id="search-field"
                   className="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
                   placeholder="Search..."
+                  
                   type="search"
                   name="search"
                 />
@@ -337,7 +336,7 @@ export default function Home() {
                     <Menu as="div" className="relative">
                       <Menu.Button className="-m-1.5 flex items-center p-1.5">
                         <span className="sr-only">Open user menu</span>
-                        <Image src={ConnectedIcon} width={20} alt="logo "/>
+                        <img src={ConnectedIcon} width={20} alt="logo "/>
 
 
                         <span className="hidden lg:flex lg:items-center">

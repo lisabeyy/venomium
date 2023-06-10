@@ -1,5 +1,5 @@
 import axios from "axios";
-import {Kind, Token, Transaction} from "@/types/transactions.type";
+import {Kind, Token, Transaction} from "../types/transactions.type";
 
 
 const msgRequest = {

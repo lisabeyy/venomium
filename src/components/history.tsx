@@ -1,11 +1,11 @@
 
 import axios from "axios";
-import { Kind, Transaction } from "@/types/transactions.type";
+import { Kind, Transaction } from "../types/transactions.type";
 import React, { useEffect, useState } from 'react';
-import { getAmountWithDecimal, retrieveImage } from "@/utils/tokens.utils";
-import Image from 'next/image';
-import { capitalizeFirstLetter } from "@/utils/global.utils";
-import { fetchTransactions } from "@/lib/trxs";
+import { getAmountWithDecimal, retrieveImage } from "../utils/tokens.utils";
+import { capitalizeFirstLetter } from "../utils/global.utils";
+import { fetchTransactions } from "../lib/trxs";
+import { IncomingMessage } from "http";
 
 interface HistoryProps {
   loading: boolean;
@@ -44,7 +44,7 @@ export default function History({ loading, transactions }: HistoryProps) {
                 {!e.imageUrl &&
                   <>
 
-                    <Image className="rounded-full" width={24} height={24} src={retrieveImage(e.token)} alt="" />
+                    <img className="rounded-full" width={24} height={24} src={retrieveImage(e.token)} alt="" />
 
                   </>
                 }
@@ -52,7 +52,7 @@ export default function History({ loading, transactions }: HistoryProps) {
                 {e.imageUrl &&
                   <>
 
-                    <Image className="rounded-full" width={24} height={24} src={e.imageUrl} alt="" />
+                    <img className="rounded-full" width={24} height={24} src={e.imageUrl} alt="" />
 
                   </>
                 }
