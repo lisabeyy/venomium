@@ -10,7 +10,6 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import faker from 'faker';
 import BtcData from '../../assets/btcdata.json';
 ChartJS.register(
   CategoryScale,
