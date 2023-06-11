@@ -165,7 +165,7 @@ export default function Home() {
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10">
                     <div className="flex h-16 shrink-0 items-center">
                     {/* logo venom */}
-                  <img src={Logo} width={100} alt="logo "/>
+                  <img src={Logo} width={100} alt="logo "/> <span className='text-white text-bold'>Testnet</span>
                     </div>
                     <nav className="flex flex-1 flex-col">
                       <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -236,7 +236,7 @@ export default function Home() {
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
             <div className="flex h-16 shrink-0 items-center">
             { /* logo venom */}
-            <img src={Logo} width={100} alt="logo "/>
+            <img src={Logo} width={100} alt="logo "/><span className='text-white text-xs font-bold '>Testnet</span>
 
 
             </div>
