@@ -281,7 +281,7 @@ export default function Stats({ address, userAddress }: StatsProps) {
                                     <img className="rounded-full inline mr-2" width={24} height={24} src={retrieveImage(t.token)} alt="" />
                                     <span>{t.token}</span>
                                   </td>
-                                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{getAmountWithDecimal(+t.amount, t.token)}</td>
+                                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{getAmountWithDecimal(+t.amount, t.token).toFixed(4)}</td>
                                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">x</td>
                                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">x</td>
 
