@@ -9,7 +9,7 @@ import { fetchAssets, fetchTransactions } from '../lib/venomScanApi';
 import { getAmountWithDecimal, retrieveImage } from '../utils/tokens.utils';
 import Logo from '../assets/logo_venomium.svg';
 let stats = [
-  { id: 1, name: 'Wallet', stat: '', icon: CurrencyDollarIcon, change: '', changeType: '', colSpan: true, chart: true },
+  { id: 1, name: 'Wallet', stat: '', value: '', icon: CurrencyDollarIcon, change: '', changeType: '', colSpan: true, chart: true },
   { id: 2, stat: 'History', icon: ClockIcon, change: '', changeType: '', colSpan: false, history: true },]
 
 function classNames(...classes) {
@@ -32,8 +32,15 @@ export default function Stats({ address, userAddress }: StatsProps) {
 
     const response = await fetchAssets(walletAddress);
     console.log('response', response.body.tokenBalances)
-
     const tokenBalances = response.body.tokenBalances;
+
+    const venomBalance = tokenBalances.find(t => t.symbol == 'VENOM');
+    console.log('venombalance', venomBalance);
+    if (venomBalance) {
+      stats[0].stat = Number(venomBalance.amount).toFixed(4).toString();
+      stats[0].value = (Number(venomBalance.amount) * Number(venomBalance.usdPrice)).toFixed(4);
+    }
+
     tokenBalances.sort((a, b) => (Number(b.amount) * Number(b.usdPrice)) - (Number(a.amount) * Number(a.usdPrice)));
     setTokensBalance(tokenBalances);
     setLoadingAsset(false);
@@ -172,6 +179,13 @@ export default function Stats({ address, userAddress }: StatsProps) {
                         </p>
                       }
 
+                  {item.value &&
+                        <p className="text-x ml-2">
+
+                          <span className='text-gray-500'> ${item.value}</span>
+                     
+                        </p>
+                      }
                       {item.change &&
                         <p
                           className={classNames(

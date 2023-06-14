@@ -5,7 +5,7 @@ import {Kind, Token, Transaction} from "../types/transactions.type";
 const msgRequest = {
   "messageTypes": ["Internal"],
   "includeAccounts": [""],
-  "limit": 100,
+  "limit": 200,
   "offset": 0,
   "ordering": {
     "column": "transactionTime",
@@ -14,7 +14,7 @@ const msgRequest = {
 }
 
 const trxRequest = {
-  "limit": 100,
+  "limit": 200,
   "offset": 0,
   "ordering": "blocktimeatdescending",
   "ownerAddress": "",
