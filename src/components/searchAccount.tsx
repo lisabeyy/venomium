@@ -4,9 +4,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { searchAccount } from '../lib/venomScanApi';
 import {
-  UserCircleIcon,
   XMarkIcon
 } from '@heroicons/react/24/outline'
+import  VenomiumSymbol  from '../assets/V-symbol.svg';
 
 interface SearchAccountProps {
   onResultClick?(address: string): void;
@@ -23,7 +23,6 @@ export default function SearchAccount({onResultClick}) {
   const fetchResult = async () => {
     setLoading(true);
     const result = await searchAccount(searchTerm);
-    console.log('search result', result);
     if (result.body.length < 1 && result.status == 200) {
       setShowNoResultMsg(true);
     }
@@ -132,7 +131,7 @@ export default function SearchAccount({onResultClick}) {
               className="px-4 py-2 cursor-pointer hover:bg-gray-100"
             >
               <span className="w-fill flex ">
-                <UserCircleIcon color='#05ED9F' className="h-5 w-5 mr-2" aria-hidden="true" /> {result.data.address}
+                <img src={VenomiumSymbol} color='#05ED9F' className="h-5 w-5 mr-4" aria-hidden="true" /> {result.data.address}
               </span>
             </li>
           ))}

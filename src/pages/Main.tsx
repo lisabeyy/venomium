@@ -62,7 +62,6 @@ export default function Home() {
   // This method allows us to gen a wallet address from inpage provider
   const getAddress = async (provider: any) => {
     const providerState = await provider?.getProviderState?.();
-    console.log('providerState', providerState)
     return providerState?.permissions.accountInteraction?.address.toString();
   };
   // Any interaction with venom-wallet (address fetching is included) needs to be authentificated
@@ -85,7 +84,6 @@ export default function Home() {
   };
 
   const handleResultClick = (address: string) => {
-    console.log('address to set', address);
     setAddress('0:'+ address);
   }
 

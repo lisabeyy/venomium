@@ -8,6 +8,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { fetchAssets, fetchTransactions } from '../lib/venomScanApi';
 import { getAmountWithDecimal, retrieveImage } from '../utils/tokens.utils';
 import Logo from '../assets/logo_venomium.svg';
+
 let stats = [
   { id: 1, name: 'Wallet', stat: '', value: '', icon: CurrencyDollarIcon, change: '', changeType: '', colSpan: true, chart: true },
   { id: 2, stat: 'History', icon: ClockIcon, change: '', changeType: '', colSpan: false, history: true },]
@@ -31,11 +32,9 @@ export default function Stats({ address, userAddress }: StatsProps) {
   const getAssets = async (walletAddress) => {
 
     const response = await fetchAssets(walletAddress);
-    console.log('response', response.body.tokenBalances)
     const tokenBalances = response.body.tokenBalances;
 
     const venomBalance = tokenBalances.find(t => t.symbol == 'VENOM');
-    console.log('venombalance', venomBalance);
     if (venomBalance) {
       stats[0].stat = Number(venomBalance.amount).toFixed(4).toString();
       stats[0].value = (Number(venomBalance.amount) * Number(venomBalance.usdPrice)).toFixed(4);

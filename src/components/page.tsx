@@ -15,8 +15,6 @@ import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import Stats from './stats';
 
 import { initVenomConnect } from '../lib/venom';
-import  Logo  from '../assets/logo_venomium.svg';
-import  ConnectedIcon  from '../assets/connected.svg';
 import VenomConnect from 'venom-connect';
 import ConnectWallet from './connectWallet';
 import SearchAccount from './searchAccount';
@@ -61,7 +59,6 @@ export default function Home() {
   // This method allows us to gen a wallet address from inpage provider
   const getAddress = async (provider: any) => {
     const providerState = await provider?.getProviderState?.();
-    console.log('providerState', providerState)
     return providerState?.permissions.accountInteraction?.address.toString();
   };
   // Any interaction with venom-wallet (address fetching is included) needs to be authentificated
