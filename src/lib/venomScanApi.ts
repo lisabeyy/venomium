@@ -42,52 +42,59 @@ const tokenBalanceReq = {
 
 export async function searchAccount(searchString: string) {
 
-const req = {
-  query: searchString
-}
-try { // 👇️ const data: CreateUserResponse
-  const responseObj = await axios.post<any>(process.env.REACT_APP_VENOMSCAN_API + '/v1/search', req, {
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json'
-    }
-  },);
-
-  return {status: 200, body: responseObj.data};
-
-} catch (error) {
-  if (axios.isAxiosError(error)) {
-    console.log('error message: ', error.message);
-    // 👇️ error: AxiosError<any, any>
-    return {status: 400, body: error.message};
-  } else {
-    console.log('unexpected error: ', error);
-    return {status: 400, body: 'An unexpected error occurred'};
+  const req = {
+    query: searchString
   }
-}
+  try { // 👇️ const data: CreateUserResponse
+    const responseObj = await axios.post<any>(process.env.REACT_APP_VENOMSCAN_API + '/v1/search', req, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      }
+    },);
+
+    return {status: 200, body: responseObj.data};
+
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log('error message: ', error.message);
+      // 👇️ error: AxiosError<any, any>
+      return {status: 400, body: error.message};
+    } else {
+      console.log('unexpected error: ', error);
+      return {status: 400, body: 'An unexpected error occurred'};
+    }
+  }
 }
 
 export async function fetchAssets(accountAddress: string) {
 
-  const accountVenom = await GetAccount(accountAddress);
-  const balanceToken = await GetTokenBalance(accountAddress);
-
-  const tokenBalances: Token[] = [];
-  for (const tokenBalance of balanceToken.body ?. balances) {
-    tokenBalances.push(tokenBalance);
+  const req = {
+    address: accountAddress,
+    networkId: 'venom'
   }
+  try { // 👇️ const data: CreateUserResponse
+    const responseObj = await axios.post<any>(process.env.REACT_APP_SNIPA_API + '/wallet-assets', req, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      }
+    },);
 
-  const newBalance: Token = {
-    amount: accountVenom.body.balance,
-    blockTime: accountVenom.body.updatedAt,
-    ownerAddress: accountVenom.body.address,
-    rootAddress: '',
-    token: 'Venom',
-    tokenStandard: 'TIP3'
-  };
+    return {status: 200, body: responseObj.data};
 
-  tokenBalances.push(newBalance);
-  return tokenBalances.sort((a, b) => b.blockTime - a.blockTime);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log('error message: ', error.message);
+      // 👇️ error: AxiosError<any, any>
+      return {status: 400, body: error.message};
+    } else {
+      console.log('unexpected error: ', error);
+      return {status: 400, body: 'An unexpected error occurred'};
+    }
+
+
+  }
 
 }
 
@@ -183,8 +190,8 @@ async function GetAccount(accountAddress: string): Promise<any> {
 }
 
 
-  async function GetTokenBalance(accountAddress: string): Promise<any>{
-    
+async function GetTokenBalance(accountAddress: string): Promise<any> {
+
   tokenBalanceReq.ownerAddress = accountAddress;
   try { // 👇️ const data: CreateUserResponse
     const responseObj = await axios.post<any>('https://testnet-tokens.venomscan.com/v1/balances', tokenBalanceReq, {
@@ -205,7 +212,8 @@ async function GetAccount(accountAddress: string): Promise<any> {
       console.log('unexpected error: ', error);
       return {status: 400, body: 'An unexpected error occurred'};
     }
-  }}
+  }
+}
 
 
 async function GetMessages(accountAddress: string): Promise<any> {

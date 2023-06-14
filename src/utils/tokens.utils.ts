@@ -23,8 +23,8 @@ export function retrieveImage(tokenSymbol) {
   const venomTokens = ['Venom', 'wVenom'];
   const testTokens = ['TUSDT'];
 
-
-if (testTokens.includes(tokenSymbol)) {
+if (tokenSymbol) {
+  if (testTokens.includes(tokenSymbol)) {
     return `https://testnet.web3.world/token-icons/${
       tokenSymbol.substring(1)
     }.png`;
@@ -36,4 +36,6 @@ if (testTokens.includes(tokenSymbol)) {
       tokenSymbol.toUpperCase()
     }.png`;
   }
+}
+
 }
