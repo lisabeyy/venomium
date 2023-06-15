@@ -74,7 +74,7 @@ export default function SearchAccount({onResultClick}) {
 
 
   const handleResultClick = (account) => {
-    setAddressSelected(account.data.address);
+    setAddressSelected('0:' + account.data.address);
     setLoading(false);
     setShowNoResultMsg(false);
     setResults([]);
@@ -131,7 +131,7 @@ export default function SearchAccount({onResultClick}) {
               className="px-4 py-2 cursor-pointer hover:bg-gray-100"
             >
               <span className="w-fill flex ">
-                <img src={VenomiumSymbol} color='#05ED9F' className="h-5 w-5 mr-4" aria-hidden="true" /> {result.data.address}
+                <img src={VenomiumSymbol} color='#05ED9F' className="h-5 w-5 mr-4" aria-hidden="true" />0:{result.data.address}
               </span>
             </li>
           ))}

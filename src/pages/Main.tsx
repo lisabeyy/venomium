@@ -20,6 +20,7 @@ import  ConnectedIcon  from '../assets/connected.svg';
 import VenomConnect from 'venom-connect';
 import ConnectWallet from '../components/connectWallet';
 import SearchAccount from '../components/searchAccount';
+import WatchlistService from '../lib/watchlist.api';
 
 const navigation = [
   { name: 'My Wallet', href: '#', icon: HomeIcon, current: true },
@@ -47,6 +48,7 @@ export default function Home() {
   const [venomProvider, setVenomProvider] = useState<any>();
   const [address, setAddress] = useState<string>('');
   const [userAddress, setUserAddress] = useState<string>('');
+  const [userWatchlist, setUserWatchlist] = useState<any>();
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [venomConnect, setVenomConnect] = useState<VenomConnect | undefined>();
   const init = async () => {
@@ -81,6 +83,7 @@ export default function Home() {
     venomProvider?.disconnect();
     setAddress('');
     setUserAddress('');
+    setUserWatchlist(null);
   };
 
   const handleResultClick = (address: string) => {
@@ -93,6 +96,9 @@ export default function Home() {
     const venomWalletAddress = provider ? await getAddress(provider) : undefined;
     setAddress(venomWalletAddress);
     setUserAddress(venomWalletAddress);
+    const userWatchlist = await WatchlistService.getWatchlist(venomWalletAddress);
+    console.log('userWatchlist', userWatchlist);
+    setUserWatchlist(userWatchlist);
   };
   useEffect(() => {
     // connect event handler
@@ -367,7 +373,7 @@ export default function Home() {
             </div>
 
 
-            {!address && (
+            {!userAddress && (
               <ConnectWallet venomConnect={venomConnect} />
             )}
 

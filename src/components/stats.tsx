@@ -8,6 +8,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { fetchAssets, fetchTransactions } from '../lib/venomScanApi';
 import { getAmountWithDecimal, retrieveImage } from '../utils/tokens.utils';
 import Logo from '../assets/logo_venomium.svg';
+import Watchlist from './watchlist';
 
 let stats = [
   { id: 1, name: 'Wallet', stat: '', value: '', icon: CurrencyDollarIcon, change: '', changeType: '', colSpan: true, chart: true },
@@ -81,7 +82,7 @@ export default function Stats({ address, userAddress }: StatsProps) {
           >
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
           </Transition.Child>
-
+     
           <div className="fixed inset-0 z-10 overflow-y-auto">
             <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
               <Transition.Child
@@ -100,12 +101,11 @@ export default function Stats({ address, userAddress }: StatsProps) {
                     </div>
                     <div className="mt-3 text-center sm:mt-5">
                       <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                        Watchlist - Coming Soon
+                        Watchlist - Connect your wallet
                       </Dialog.Title>
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
-                          Soon, you will be able to save a wallet to your watchlist and track their activities!
-                          Track the performance of other portfolios!
+                          You need to connect your wallet first in order to track the performance of other portfolios!
                         </p>
                       </div>
                     </div>
@@ -137,9 +137,13 @@ export default function Stats({ address, userAddress }: StatsProps) {
 
           <div className="flex justify-between">
             <h3 className="text-base text-left font-semibold leading-6 text-gray-900">Last 30 days</h3>
-            {userAddress && (address !== userAddress) &&
+            {!userAddress  &&
               <button className="btn cursor-pointer text-black  text-right" onClick={() => setOpenModal(true)}><StarIcon width={20} height={20} className='mr-2' />Add to watchlist</button>
-            }
+             }
+
+            {userAddress && (address !== userAddress) &&
+              <Watchlist walletAddress={address} userAddress={userAddress}  /> 
+             }
           </div>
 
 
