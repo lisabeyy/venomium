@@ -13,7 +13,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import Stats from '../components/stats';
-
+import { useParams } from "react-router-dom";
 import { initVenomConnect } from '../lib/venom';
 import  Logo  from '../assets/logo_venomium.svg';
 import  ConnectedIcon  from '../assets/connected.svg';
@@ -44,7 +44,9 @@ export default function Home() {
   // We will store token balance from contract
 
 
-  const [searchAddressQuery, setSearchAddressQuery] = useState('');
+ 
+  const params = useParams();
+  const [searchAddress, setSearchAddress] = useState<string>('');
   const [venomProvider, setVenomProvider] = useState<any>();
   const [address, setAddress] = useState<string>('');
   const [userAddress, setUserAddress] = useState<string>('');
@@ -56,6 +58,10 @@ export default function Home() {
     setVenomConnect(_venomConnect);
   };
   useEffect(() => {
+    if(params && params.address) {
+      setSearchAddress(params.address);
+      setAddress(params.address);
+    }
     init();
   }, []);
 
@@ -94,7 +100,8 @@ export default function Home() {
   // When our provider is ready, we need to get address and balance from.
   const onProviderReady = async (provider: any) => {
     const venomWalletAddress = provider ? await getAddress(provider) : undefined;
-    setAddress(venomWalletAddress);
+    console.log('searchAddress', searchAddress);
+    setAddress(searchAddress ? searchAddress : venomWalletAddress);
     setUserAddress(venomWalletAddress);
     const userWatchlist = await WatchlistService.getWatchlist(venomWalletAddress);
     console.log('userWatchlist', userWatchlist);
@@ -315,7 +322,7 @@ export default function Home() {
 
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
               <div className="relative flex flex-1">
-                <SearchAccount onResultClick={handleResultClick}/> 
+                <SearchAccount onResultClick={handleResultClick} address={searchAddress ? searchAddress : address}/> 
               </div>
               <div className="flex items-center gap-x-4 lg:gap-x-6">
                 <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">

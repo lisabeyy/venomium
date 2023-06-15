@@ -10,8 +10,9 @@ import  VenomiumSymbol  from '../assets/V-symbol.svg';
 
 interface SearchAccountProps {
   onResultClick?(address: string): void;
+  address?: string;
 }
-export default function SearchAccount({onResultClick}) {
+export default function SearchAccount({onResultClick, address}) {
   const [searchTerm, setSearchTerm] = useState('');
   const [addressSelected, setAddressSelected] = useState('');
 
@@ -19,6 +20,12 @@ export default function SearchAccount({onResultClick}) {
   const [showNoResultMsg, setShowNoResultMsg] = useState(false);
   const [results, setResults] = useState<any>(null);
   const autocompleteRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    console.log('address', address)
+    setAddressSelected(address)
+  }, []);
+
 
   const fetchResult = async () => {
     setLoading(true);
