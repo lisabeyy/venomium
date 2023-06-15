@@ -64,7 +64,9 @@ export default function SearchAccount({onResultClick, address}) {
   };
 
   const handleCloseResults = () => {
+    navigate('/wallet/');
     setSearchTerm('');
+    setAddressDisplayed('');
     setAddressSelected('');
     setResults([]);
     setShowNoResultMsg(false);
