@@ -20,7 +20,7 @@ export function getAddressForToken(tokenSymbol) {
 
 export function retrieveImage(tokenSymbol) {
 
-  const venomTokens = ['Venom', 'wVenom'];
+  const venomTokens = ['VENOM', 'WVENOM', 'TSTVENOM'];
   const testTokens = ['TUSDT'];
 
 if (tokenSymbol) {
@@ -28,7 +28,9 @@ if (tokenSymbol) {
     return `https://testnet.web3.world/token-icons/${
       tokenSymbol.substring(1)
     }.png`;
-  } else if (tokenSymbol == 'NUMI') {
+  } else if (venomTokens.includes(tokenSymbol.toUpperCase())){
+    return 'https://testnet.web3.world/token-icons/VENOM.png'
+  }else if (tokenSymbol == 'NUMI') {
     return 'https://cdn.venom.foundation/assets/testnet/icons/NUMI/logo.svg'
   }
   else {

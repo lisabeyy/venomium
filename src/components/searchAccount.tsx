@@ -1,12 +1,12 @@
 
 
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 import { searchAccount } from '../lib/venomScanApi';
 import {
   XMarkIcon
 } from '@heroicons/react/24/outline'
 import  VenomiumSymbol  from '../assets/V-symbol.svg';
+import { useNavigate } from "react-router-dom";
 
 interface SearchAccountProps {
   onResultClick?(address: string): void;
@@ -15,15 +15,15 @@ interface SearchAccountProps {
 export default function SearchAccount({onResultClick, address}) {
   const [searchTerm, setSearchTerm] = useState('');
   const [addressSelected, setAddressSelected] = useState('');
-
+  const [addressDisplayed, setAddressDisplayed] = useState('');
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showNoResultMsg, setShowNoResultMsg] = useState(false);
   const [results, setResults] = useState<any>(null);
   const autocompleteRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log('address', address)
-    setAddressSelected(address)
+    setAddressDisplayed(address)
   }, []);
 
 
@@ -79,13 +79,28 @@ export default function SearchAccount({onResultClick, address}) {
     }
   };
 
+  useEffect(() => {
+    if (addressSelected) {
+      setAddressDisplayed(addressSelected)
+      navigate('/wallet/' + addressSelected);
+    }
+  
+  }, [addressSelected]);
+
+ 
 
   const handleResultClick = (account) => {
+
+
+    setAddressDisplayed('0:' + account.data.address);
     setAddressSelected('0:' + account.data.address);
     setLoading(false);
     setShowNoResultMsg(false);
     setResults([]);
     onResultClick(account.data.address);
+    
+  
+
     // Launch the getAccount function with the selected account
     // getAccount(account);
   };
@@ -95,12 +110,12 @@ export default function SearchAccount({onResultClick, address}) {
       <div className='relative'>
         <input
           type="text"
-          value={addressSelected ? addressSelected : searchTerm}
+          value={addressDisplayed ? addressDisplayed : searchTerm}
           onChange={handleSearch}
           placeholder="Search for an account"
           className="px-4 py-2 text-gray-800 rounded-lg border border-gray-300 focus:outline-none"
         />
-        {(searchTerm || addressSelected) && (
+        {(searchTerm || addressDisplayed) && (
           <button
             onClick={handleCloseResults}
             className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
