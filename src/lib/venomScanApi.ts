@@ -107,35 +107,44 @@ export async function fetchTransactions(accountAddress: string) {
 
   const transactions: Transaction[] = [];
 
-  for (const transaction of trxs.body ?. transactions) {
-    transactions.push(transaction);
+  if (trxs.body && trxs.body.transactions.length > 0) {
+
+    for (const transaction of trxs.body ?. transactions) {
+      transactions.push(transaction);
+    }
+  }
+ 
+  if (messages.status == 200) {
+    for (const transaction of messages.body) {
+      const newTransaction: Transaction = {
+        transactionHash: transaction.transactionHash,
+        sender: {
+          ownerAddress: transaction.srcAddress,
+          tokenWalletAddress: null
+        },
+        receiver: {
+          ownerAddress: transaction.dstAddress,
+          tokenWalletAddress: null
+        },
+        amount: transaction.messageValue,
+        rootAddress: "",
+        token: "Venom",
+        kind: transaction.isOut ? Kind.send : Kind.receive,
+        standard: "Tip3",
+        blockTime: transaction.transactionTime * 1000,
+        imageUrl: 'https://testnet.web3.world/token-icons/VENOM.png'
+      };
+  
+      transactions.push(newTransaction);
+    }
   }
 
-  for (const transaction of messages.body) {
-    const newTransaction: Transaction = {
-      transactionHash: transaction.transactionHash,
-      sender: {
-        ownerAddress: transaction.srcAddress,
-        tokenWalletAddress: null
-      },
-      receiver: {
-        ownerAddress: transaction.dstAddress,
-        tokenWalletAddress: null
-      },
-      amount: transaction.messageValue,
-      rootAddress: "",
-      token: "Venom",
-      kind: transaction.isOut ? Kind.send : Kind.receive,
-      standard: "Tip3",
-      blockTime: transaction.transactionTime * 1000,
-      imageUrl: 'https://testnet.web3.world/token-icons/VENOM.png'
-    };
 
-    transactions.push(newTransaction);
+  if (transactions.length > 0) {
+    return transactions.sort((a, b) => b.blockTime - a.blockTime);
+  } else {
+    return [];
   }
-
-
-  return transactions.sort((a, b) => b.blockTime - a.blockTime);
 
 }
 

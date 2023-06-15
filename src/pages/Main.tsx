@@ -4,6 +4,7 @@ import {
   Bars3Icon,
   BellIcon,
   UserCircleIcon,
+  StarIcon,
   Cog6ToothIcon,
   FolderIcon,
   WalletIcon,
@@ -24,6 +25,7 @@ import WatchlistService from '../lib/watchlist.api';
 
 const navigation = [
   { name: 'My Wallet', href: '#', icon: HomeIcon, current: true },
+  { name: 'My Watchlist', href: '#', icon: StarIcon, current: false },
 ]
 
 const teams = [

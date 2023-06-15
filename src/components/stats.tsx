@@ -30,37 +30,45 @@ export default function Stats({ address, userAddress }: StatsProps) {
   const [tokensBalance, setTokensBalance] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingAsset, setLoadingAsset] = useState<boolean>(true);
+
   const getAssets = async (walletAddress) => {
-
     const response = await fetchAssets(walletAddress);
-    const tokenBalances = response.body.tokenBalances;
+    if (response.status == 200) {
+      const tokenBalances = response.body.tokenBalances;
+      const venomBalance = tokenBalances.find(t => t.symbol == 'VENOM');
+      if (venomBalance) {
+        stats[0].stat = Number(venomBalance.amount).toFixed(4).toString();
+        stats[0].value = (Number(venomBalance.amount) * Number(venomBalance.usdPrice)).toFixed(4);
+      }
 
-    const venomBalance = tokenBalances.find(t => t.symbol == 'VENOM');
-    if (venomBalance) {
-      stats[0].stat = Number(venomBalance.amount).toFixed(4).toString();
-      stats[0].value = (Number(venomBalance.amount) * Number(venomBalance.usdPrice)).toFixed(4);
+      tokenBalances.sort((a, b) => (Number(b.amount) * Number(b.usdPrice)) - (Number(a.amount) * Number(a.usdPrice)));
+      setTokensBalance(tokenBalances);
     }
-
-    tokenBalances.sort((a, b) => (Number(b.amount) * Number(b.usdPrice)) - (Number(a.amount) * Number(a.usdPrice)));
-    setTokensBalance(tokenBalances);
     setLoadingAsset(false);
+
+
   }
   const getTransactions = async (walletAddress) => {
 
     const trxs = await fetchTransactions(walletAddress);
-    const venomTrxs = trxs.filter(t => t.token == 'Venom');
-    const firstVenomTrxAmount = +venomTrxs[0].amount / (10 ** 9);
-    const lastVenomTrxAmount = +venomTrxs[venomTrxs.length - 1].amount / (10 ** 9);
 
-    const percentageChange = ((lastVenomTrxAmount - firstVenomTrxAmount) / firstVenomTrxAmount) * 100
-    stats[0].change = (percentageChange > 0 ? '+' : '') + percentageChange.toFixed(2).toString() + ' %';
-    stats[0].changeType = percentageChange > 0 ? 'increase' : 'decrease';
-    setTransactions(trxs);
+    if (trxs.length > 0) {
+      const venomTrxs = trxs.filter(t => t.token == 'Venom');
+      const firstVenomTrxAmount = +venomTrxs[0].amount / (10 ** 9);
+      const lastVenomTrxAmount = +venomTrxs[venomTrxs.length - 1].amount / (10 ** 9);
+      const percentageChange = ((lastVenomTrxAmount - firstVenomTrxAmount) / firstVenomTrxAmount) * 100
+      stats[0].change = (percentageChange > 0 ? '+' : '') + percentageChange.toFixed(2).toString() + ' %';
+      stats[0].changeType = percentageChange > 0 ? 'increase' : 'decrease';
+      setTransactions(trxs);
+    }
     setLoading(false);
+
+
   }
   useEffect(() => {
     if (address) {
       setLoading(true);
+      setLoadingAsset(true);
       getTransactions(address);
       getAssets(address);
     }
@@ -82,7 +90,7 @@ export default function Stats({ address, userAddress }: StatsProps) {
           >
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
           </Transition.Child>
-     
+
           <div className="fixed inset-0 z-10 overflow-y-auto">
             <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
               <Transition.Child
@@ -137,13 +145,13 @@ export default function Stats({ address, userAddress }: StatsProps) {
 
           <div className="flex justify-between">
             <h3 className="text-base text-left font-semibold leading-6 text-gray-900">Last 30 days</h3>
-            {!userAddress  &&
+            {!userAddress &&
               <button className="btn cursor-pointer text-black  text-right" onClick={() => setOpenModal(true)}><StarIcon width={20} height={20} className='mr-2' />Add to watchlist</button>
-             }
+            }
 
             {userAddress && (address !== userAddress) &&
-              <Watchlist walletAddress={address} userAddress={userAddress}  /> 
-             }
+              <Watchlist walletAddress={address} userAddress={userAddress} />
+            }
           </div>
 
 
@@ -182,11 +190,11 @@ export default function Stats({ address, userAddress }: StatsProps) {
                         </p>
                       }
 
-                  {item.value &&
+                      {item.value &&
                         <p className="text-x ml-2">
 
                           <span className='text-gray-500'> ${item.value}</span>
-                     
+
                         </p>
                       }
                       {item.change &&
@@ -216,7 +224,11 @@ export default function Stats({ address, userAddress }: StatsProps) {
 
                       <>
                         <div className='w-full'>
-                          <LineChart loading={loading} transactions={transactions} lineColor={item.changeType === 'increase' ? 'green' : 'red'} />
+                          {transactions && transactions?.length > 0 ? (
+                            <LineChart loading={loading} transactions={transactions} lineColor={item.changeType === 'increase' ? 'green' : 'red'} />
+                          ) : (
+                            <p className='mt-8 text-center text-xl text-gray-800'>No data</p>
+                          )}
                         </div>
 
 
@@ -233,7 +245,11 @@ export default function Stats({ address, userAddress }: StatsProps) {
 
                     {item.history &&
                       <div className='w-full h-[450px] overflow-y-scroll'>
-                        <History loading={loading} transactions={transactions} />
+                        {transactions && transactions?.length > 0 ? (
+                          <History loading={loading} transactions={transactions} />
+                        ) : (
+                          <p className='mt-8 text-center text-xl text-gray-800'>No data</p>
+                        )}
                       </div>
                     }
 
@@ -283,60 +299,63 @@ export default function Stats({ address, userAddress }: StatsProps) {
 
                     }
 
-                    {transactions && transactions.length > 0 &&
+                    {transactions && transactions?.length > 0 ? (
+                          <table className="min-w-full divide-y divide-gray-300">
+                          <thead>
+                            <tr>
+                              <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-normal text-gray-800 sm:pl-0">
+                                Asset
+                              </th>
+                              <th scope="col" className="px-3 py-3.5 text-left text-sm font-normal text-gray-800">
+                                Balance
+                              </th>
+                              <th scope="col" className="px-3 py-3.5 text-left text-sm font-normal text-gray-800">
+                                Price
+                              </th>
+                              <th scope="col" className="px-3 py-3.5 text-left text-sm font-normal text-gray-800">
+                                Value
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-gray-200">
+                            {tokensBalance &&
+  
+                              <>
+                                {tokensBalance.map((t) => (
+                                  <tr key={t.token}>
+                                    <td className="whitespace-nowrap flex-row py-4 pl-4 pr-3 text-sm font-semibold text-gray-900 sm:pl-0">
+  
+                                      {t.rootAddress ? (
+                                        <a href={`https://testnet.venomscan.com/tokens/${t.rootAddress}`} target='_blank' >
+                                          <img className="rounded-full inline mr-2" width={24} height={24} src={retrieveImage(t.symbol)} alt="" />
+                                          <span>{t.symbol}</span>
+                                        </a>
+                                      ) : (
+                                        <>
+                                          <img className="rounded-full inline mr-2" width={24} height={24} src={retrieveImage(t.symbol)} alt="" />
+                                          <span>{t.symbol}</span>
+                                        </>
+  
+                                      )}
+  
+  
+                                    </td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-800">{Number(t.amount).toFixed(4)}</td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-800">${Number(t.usdPrice).toFixed(4)}</td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-900">${(Number(t.usdPrice) * Number(t.amount)).toFixed(4)}</td>
+  
+                                  </tr>
+                                ))}
+                              </>
+                            }
+  
+                          </tbody>
+                        </table>
+                    ) : (
+                      <p className='mt-8 text-center text-xl text-gray-800'>No data</p>
+                    )}
 
-                      <table className="min-w-full divide-y divide-gray-300">
-                        <thead>
-                          <tr>
-                            <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-normal text-gray-800 sm:pl-0">
-                              Asset
-                            </th>
-                            <th scope="col" className="px-3 py-3.5 text-left text-sm font-normal text-gray-800">
-                              Balance
-                            </th>
-                            <th scope="col" className="px-3 py-3.5 text-left text-sm font-normal text-gray-800">
-                              Price
-                            </th>
-                            <th scope="col" className="px-3 py-3.5 text-left text-sm font-normal text-gray-800">
-                              Value
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200">
-                          {tokensBalance &&
-
-                            <>
-                              {tokensBalance.map((t) => (
-                                <tr key={t.token}>
-                                  <td className="whitespace-nowrap flex-row py-4 pl-4 pr-3 text-sm font-semibold text-gray-900 sm:pl-0">
-
-                                    {t.rootAddress ? (
-                                      <a href={`https://testnet.venomscan.com/tokens/${t.rootAddress}`} target='_blank' >
-                                        <img className="rounded-full inline mr-2" width={24} height={24} src={retrieveImage(t.symbol)} alt="" />
-                                        <span>{t.symbol}</span>
-                                      </a>
-                                    ) : (
-                                      <>
-                                        <img className="rounded-full inline mr-2" width={24} height={24} src={retrieveImage(t.symbol)} alt="" />
-                                        <span>{t.symbol}</span>
-                                      </>
-
-                                    )}
-
-
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-800">{Number(t.amount).toFixed(4)}</td>
-                                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-800">${Number(t.usdPrice).toFixed(4)}</td>
-                                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-900">${(Number(t.usdPrice) * Number(t.amount)).toFixed(4)}</td>
-
-                                </tr>
-                              ))}
-                            </>
-                          }
-
-                        </tbody>
-                      </table>
-                    }
+                
 
                   </div>
                 </div>
