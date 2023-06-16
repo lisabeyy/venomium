@@ -4,7 +4,6 @@ const API_BASE_URL = process.env.REACT_APP_WATCHLIST_API; // Replace with your A
 
 
 export interface WatchlistEntry {
-  _id: string;
   walletAddress: string;
   label: string;
 }

@@ -145,11 +145,11 @@ export default function Stats({ address, userAddress }: StatsProps) {
 
           <div className="flex justify-between">
             <h3 className="text-base text-left font-semibold leading-6 text-gray-900">Last 30 days</h3>
-            {!userAddress &&
+            {!userAddress && transactions && transactions.length > 0 && 
               <button className="btn cursor-pointer text-black  text-right" onClick={() => setOpenModal(true)}><StarIcon width={20} height={20} className='mr-2' />Add to watchlist</button>
             }
 
-            {userAddress && (address !== userAddress) &&
+            {userAddress && (address !== userAddress ) && (transactions && transactions.length > 0 ) &&
               <Watchlist walletAddress={address} userAddress={userAddress} />
             }
           </div>
@@ -235,7 +235,7 @@ export default function Stats({ address, userAddress }: StatsProps) {
                         <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
                           <div className="text-sm">
                             <a href="#" className="font-medium hover:text-[#05ED9F] text-black">
-                              View all<span className="sr-only"> {item.name} stats</span>
+                              View more <span className="sr-only"> {item.name} stats</span>
                             </a>
                           </div>
                         </div>
