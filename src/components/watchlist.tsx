@@ -111,7 +111,7 @@ export default function Watchlist({ userAddress, walletAddress }: WatchlistProps
                           <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
                             Add to your watchlist
                           </Dialog.Title>
-                          <div className="mt-2">
+                          <div className="mt-4">
                             <p className="text-sm text-gray-500">
 
 
@@ -128,15 +128,15 @@ export default function Watchlist({ userAddress, walletAddress }: WatchlistProps
                       </div>
                       <div className="mt-5 sm:mt-6">
                         <button
+                          className="inline-flex w-full justify-center rounded-md   hover:bg-gray-50 px-3 py-2 text-sm font-semibold text-black shadow-sm ring-1 ring-inset ring-gray-300  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                           type="button"
-                          className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                           onClick={() => setModalOpen(false)}
                         >
                           Cancel
                         </button>
 
                         <button
-                          className="inline-flex w-full justify-center rounded-md  px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                          className="mt-2 inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 
                           onClick={handleAddToWatchlist}
                         >
