@@ -9,7 +9,7 @@ interface WatchlistProps {
   userAddress: string;
 }
 
-export default function WatchlistComponent({ userAddress, walletAddress }: WatchlistProps) {
+export default function AddToWatchlist({ userAddress, walletAddress }: WatchlistProps) {
   const [watchlist, setWatchlist] = useState([]);
   const [label, setLabel] = useState('');
   const [modalOpen, setModalOpen] = useState(false);

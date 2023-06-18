@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import Stats from '../components/stats';
+import Stats from '../components/Stats';
 import { useParams,useNavigate } from 'react-router-dom';
 
 

@@ -18,11 +18,11 @@ import { initVenomConnect } from '../lib/venom';
 import Logo from '../assets/logo_venomium.svg';
 import ConnectedIcon from '../assets/connected.svg';
 import VenomConnect from 'venom-connect';
-import ConnectWallet from '../components/connectWallet';
-import SearchAccount from '../components/searchAccount';
+import ConnectWallet from '../components/ConnectWallet';
+import SearchAccount from '../components/SearchAccount';
 import WatchlistService from '../lib/watchlist.api';
-import Wallet from './Wallet';
-import Watchlist from './Watchlist';
+import Wallet from './WalletPage';
+import Watchlist from './WatchlistPage';
 
 const navigation = [
   { name: 'My Wallet', href: '/wallet', icon: HomeIcon, current: true },

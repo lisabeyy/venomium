@@ -7,7 +7,7 @@ import {
 
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import Stats from '../components/stats';
+import Stats from '../components/Stats';
 import { BrowserRouter as Router, Route, Routes, Navigate, useParams, useNavigate, Link } from 'react-router-dom';
 import WatchlistService, { WatchlistEntry } from '../lib/watchlist.api';
 import { fetchAssets } from '../lib/venomScanApi';

@@ -1,14 +1,14 @@
 import { ArrowDownIcon, ArrowUpIcon, WalletIcon } from '@heroicons/react/20/solid'
 import { CurrencyDollarIcon, ClockIcon, StarIcon } from '@heroicons/react/24/outline'
-import LineChart from './chart';
-import History from './history';
+import LineChart from './LineChart';
+import History from './History';
 import { Transaction } from '../types/transactions.type';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react'
 import { fetchAssets, fetchTransactions } from '../lib/venomScanApi';
 import { getAmountWithDecimal, retrieveImage } from '../utils/tokens.utils';
 import Logo from '../assets/logo_venomium.svg';
-import WatchlistComponent from './WatchlistComponent';
+import AddToWatchlist from './AddToWatchlist';
 
 let stats = [
   { id: 1, name: 'Wallet', stat: '', value: '', icon: CurrencyDollarIcon, change: '', changeType: '', colSpan: true, chart: true },
@@ -150,7 +150,7 @@ export default function Stats({ address, userAddress }: StatsProps) {
             }
 
             {userAddress && (address !== userAddress ) && (transactions && transactions.length > 0 ) &&
-              <WatchlistComponent walletAddress={address} userAddress={userAddress} />
+              <AddToWatchlist walletAddress={address} userAddress={userAddress} />
             }
           </div>
 
