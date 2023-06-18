@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   Bars3Icon,
@@ -13,8 +13,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import Stats from '../components/stats';
-import { Router, Routes, useParams } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate, useParams, Link, useLocation } from 'react-router-dom';
 import { initVenomConnect } from '../lib/venom';
 import Logo from '../assets/logo_venomium.svg';
 import ConnectedIcon from '../assets/connected.svg';
@@ -22,10 +21,12 @@ import VenomConnect from 'venom-connect';
 import ConnectWallet from '../components/connectWallet';
 import SearchAccount from '../components/searchAccount';
 import WatchlistService from '../lib/watchlist.api';
+import Wallet from './Wallet';
+import Watchlist from './Watchlist';
 
 const navigation = [
-  { name: 'My Wallet', href: '/', icon: HomeIcon, current: true },
-  { name: 'My Watchlist', href: '#', openWatchlist: true, icon: StarIcon, current: false },
+  { name: 'My Wallet', href: '/wallet', icon: HomeIcon, current: true },
+  { name: 'My Watchlist', href: '/watchlist', openWatchlist: true, icon: StarIcon, current: false },
 ]
 
 const teams = [
@@ -40,10 +41,7 @@ function classNames(...classes) {
 }
 
 
-
-
-export default function Home() {
-  // We will store token balance from contract
+function Layout() {
 
 
 
@@ -52,12 +50,10 @@ export default function Home() {
   const [venomProvider, setVenomProvider] = useState<any>();
   const [address, setAddress] = useState<string>('');
   const [userAddress, setUserAddress] = useState<string>('');
-  const [userWatchlist, setUserWatchlist] = useState<any>();
-  const [openWatchlist, setOpenWatchlist] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [venomConnect, setVenomConnect] = useState<VenomConnect | undefined>();
-
-
+  const [currentURL, setCurrentURL] = useState<string>('');
+  const pathname = window.location.pathname
 
 
   const init = async () => {
@@ -96,7 +92,6 @@ export default function Home() {
     venomProvider?.disconnect();
     setAddress('');
     setUserAddress('');
-    setUserWatchlist(null);
   };
 
   const handleResultClick = (address: string) => {
@@ -104,17 +99,16 @@ export default function Home() {
   }
 
 
-  const handleOpenWatchlist = () => {
-    setOpenWatchlist(true);
-  }
+
+
+
 
   // When our provider is ready, we need to get address and balance from.
   const onProviderReady = async (provider: any) => {
     const venomWalletAddress = provider ? await getAddress(provider) : undefined;
     setAddress(searchAddress ? searchAddress : venomWalletAddress);
     setUserAddress(venomWalletAddress);
-    const userWatchlist = await WatchlistService.getWatchlist(venomWalletAddress);
-    setUserWatchlist(userWatchlist);
+
   };
   useEffect(() => {
     // connect event handler
@@ -130,77 +124,10 @@ export default function Home() {
 
 
   return (
-    <>
-      {/*
-        This example requires updating your template:
 
-        ```
-        <htmlclassName="h-full bg-white">
-        <bodyclassName="h-full">
-        ```
-      */}
+
+    <Router>
       <div className='h-full'>
-
-        <Transition.Root show={openWatchlist} as={Fragment}>
-          <Dialog as="div" className="relative z-10" onClose={setOpenWatchlist}>
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-            </Transition.Child>
-
-            <div className="fixed inset-0 z-10 overflow-y-auto">
-              <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                <Transition.Child
-                  as={Fragment}
-                  enter="ease-out duration-300"
-                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                  enterTo="opacity-100 translate-y-0 sm:scale-100"
-                  leave="ease-in duration-200"
-                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                >
-            
-
-                  <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
-                      <div>
-                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-                          <StarIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
-                        </div>
-                        <div className="mt-3 text-center sm:mt-5">
-                          <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                           Your Watchlist
-                          </Dialog.Title>
-                          <div className="mt-2">
-                            <p className="text-sm text-gray-500">
-
-                              Coming soon
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="mt-5 sm:mt-6">
-                        
-
-                        <button
-                          className="inline-flex w-full justify-center rounded-md  px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                          onClick={() => setOpenWatchlist(false)}
-                        >
-                          Close
-                        </button>
-                      </div>
-                    </Dialog.Panel>
-                </Transition.Child>
-              </div>
-            </div>
-          </Dialog>
-        </Transition.Root>
 
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
@@ -255,35 +182,21 @@ export default function Home() {
                           <ul role="list" className="-mx-2 space-y-1">
                             {navigation.map((item) => (
                               <li key={item.name}>
-                                {item.openWatchlist ? (
-                                  <a
-                                    onClick={handleOpenWatchlist}
-                                    className={classNames(
-                                      item.current
-                                        ? 'bg-gray-800 text-[#05ED9F]'
-                                        : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                                    )}
-                                  >
-                                    <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
-                                    {item.name} 
-                                  </a>
-                                ) : (
-                                  <a
-                                    href={item.href}
-                                    className={classNames(
-                                      item.current
-                                        ? 'bg-gray-800 text-[#05ED9F]'
-                                        : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                                    )}
-                                  >
-                                    <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
-                                    {item.name}
-                                  </a>
-                                )
+                                <Link
+                                  onClick={() => setCurrentURL(item.href)}
+                                  to={item.href}
+                                  className={classNames(
+                                    pathname.includes(item.href) || currentURL == item.href
+                                      ? 'bg-gray-800 text-[#05ED9F]'
+                                      : 'text-gray-400 hover:text-white hover:bg-gray-800',
+                                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                                  )}
+                                >
+                                  <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
+                                  {item.name} 
+                                </Link>
 
-                                }
+
 
                               </li>
                             ))}
@@ -347,36 +260,21 @@ export default function Home() {
                     {navigation.map((item) => (
                       <li key={item.name}>
 
-                        {item.openWatchlist ? (
-                          <a
-                            href={item.href}
-                            onClick={handleOpenWatchlist}
-                            className={classNames(
-                              item.current
-                                ? 'bg-gray-800 text-white'
-                                : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                              'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                            )}
-                          >
-                            <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
-                            {item.name}
-                          </a>
-                        ) : (
-                          <a
-                            href={item.href}
-                            className={classNames(
-                              item.current
-                                ? 'bg-gray-800 text-white'
-                                : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                              'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                            )}
-                          >
-                            <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
-                            {item.name}
-                          </a>
-                        )
+                        <Link
 
-                        }
+                          onClick={() => setCurrentURL(item.href)}
+                          to={item.href}
+                          className={classNames(
+                            pathname.includes(item.href) || currentURL == item.href
+                              ? 'bg-gray-800 text-white'
+                              : 'text-gray-400 hover:text-white hover:bg-gray-800',
+                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                          )}
+                        >
+                          <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
+                          {item.name} 
+                        </Link>
+
 
 
                       </li>
@@ -497,14 +395,20 @@ export default function Home() {
 
           </div>
 
-          <main className="py-10 bg-white h-full overflow-y-scroll">
-            <div className="px-4 sm:px-6 lg:px-8">
-              <Stats address={address} userAddress={userAddress} />
-            </div>
-          </main>
+          <Routes>
+            <Route path='/' element={<Navigate to='/wallet/' />} />
+            <Route path="/wallet/:address?" element={<Wallet userAddress={userAddress} address={address} />} />
+            <Route path="/watchlist" element={<Watchlist addressRedirect={address} userAddress={userAddress} />} />
+          </Routes>
+
+
 
         </div>
       </div>
-    </>
-  )
+    </Router>
+
+
+  );
 }
+
+export default Layout;

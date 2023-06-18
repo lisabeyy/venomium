@@ -8,7 +8,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { fetchAssets, fetchTransactions } from '../lib/venomScanApi';
 import { getAmountWithDecimal, retrieveImage } from '../utils/tokens.utils';
 import Logo from '../assets/logo_venomium.svg';
-import Watchlist from './watchlist';
+import WatchlistComponent from './WatchlistComponent';
 
 let stats = [
   { id: 1, name: 'Wallet', stat: '', value: '', icon: CurrencyDollarIcon, change: '', changeType: '', colSpan: true, chart: true },
@@ -150,7 +150,7 @@ export default function Stats({ address, userAddress }: StatsProps) {
             }
 
             {userAddress && (address !== userAddress ) && (transactions && transactions.length > 0 ) &&
-              <Watchlist walletAddress={address} userAddress={userAddress} />
+              <WatchlistComponent walletAddress={address} userAddress={userAddress} />
             }
           </div>
 

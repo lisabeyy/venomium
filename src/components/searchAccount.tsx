@@ -8,6 +8,10 @@ import {
 import  VenomiumSymbol  from '../assets/V-symbol.svg';
 import { useNavigate } from "react-router-dom";
 
+
+
+
+
 interface SearchAccountProps {
   onResultClick?(address: string): void;
   address?: string;
@@ -16,12 +20,11 @@ export default function SearchAccount({onResultClick, address}) {
   const [searchTerm, setSearchTerm] = useState('');
   const [addressSelected, setAddressSelected] = useState('');
   const [addressDisplayed, setAddressDisplayed] = useState('');
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showNoResultMsg, setShowNoResultMsg] = useState(false);
   const [results, setResults] = useState<any>(null);
   const autocompleteRef = useRef<HTMLDivElement>(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     setAddressDisplayed(address)
   }, []);
@@ -99,8 +102,8 @@ export default function SearchAccount({onResultClick, address}) {
     setLoading(false);
     setShowNoResultMsg(false);
     setResults([]);
+    navigate('/wallet/' + '0:' + account.data.addres);
     onResultClick(account.data.address);
-    
   
 
     // Launch the getAccount function with the selected account

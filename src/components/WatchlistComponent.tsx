@@ -9,17 +9,18 @@ interface WatchlistProps {
   userAddress: string;
 }
 
-export default function Watchlist({ userAddress, walletAddress }: WatchlistProps) {
+export default function WatchlistComponent({ userAddress, walletAddress }: WatchlistProps) {
   const [watchlist, setWatchlist] = useState([]);
   const [label, setLabel] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
+  const [updateLoading, setUpdateLoading] = useState(false);
   const [modalEditOpen, setModalEditOpen] = useState(false);
 
   const loadWatchlist = async () => {
     try {
       const watchlist = await WatchlistService.getWatchlist(userAddress);
       setWatchlist(watchlist);
-      console.log('watchlist', watchlist)
+      setLabel(watchlist[walletAddress].label ? watchlist[walletAddress].label : '')
     } catch (error) {
       console.error('Error loading watchlist:', error);
     }
@@ -40,6 +41,7 @@ export default function Watchlist({ userAddress, walletAddress }: WatchlistProps
     }
   };
 
+
   const handleDeleteFromWatchlist = async () => {
     try {
       await WatchlistService.deleteFromWatchlist(userAddress, walletAddress);
@@ -51,11 +53,13 @@ export default function Watchlist({ userAddress, walletAddress }: WatchlistProps
   };
 
   const handleUpdateWatchlistEntry = async () => {
+    setUpdateLoading(true);
     try {
       await WatchlistService.updateWatchlistEntry(userAddress, walletAddress, label);
       setModalEditOpen(false);
       loadWatchlist();
-    
+      setUpdateLoading(false);
+
     } catch (error) {
       console.error('Error updating watchlist entry:', error);
     }
@@ -70,7 +74,7 @@ export default function Watchlist({ userAddress, walletAddress }: WatchlistProps
       ) : (
         <button className="btn cursor-pointer text-black  text-right" onClick={() => setModalOpen(true)}><OutlineStarIcon width={20} height={20} className='mr-2' />Add to watchlist</button>
 
-      ) }
+      )}
 
       {modalOpen && (
 
@@ -118,10 +122,12 @@ export default function Watchlist({ userAddress, walletAddress }: WatchlistProps
                               <input
                                 type="text"
                                 placeholder="Label (Optional)"
-                                className="border border-gray-300 rounded px-4 py-2 mb-4 w-full"
+                                className="border border-gray-300 text-gray-800 rounded px-4 py-2 mb-4 w-full"
                                 value={label}
                                 onChange={(e) => setLabel(e.target.value)}
                               />
+
+
                             </p>
                           </div>
                         </div>
@@ -202,9 +208,15 @@ export default function Watchlist({ userAddress, walletAddress }: WatchlistProps
                                 type="text"
                                 placeholder="Label (Optional)"
                                 className="border border-gray-300 text-gray-800 rounded px-4 py-2 mb-4 w-full"
-                                value={label ? label : watchlist[walletAddress].label}
+                                value={label}
+                                onBlur={() => {
+                                  if (label.trim() === '') {
+                                    setLabel(watchlist[walletAddress].label ? watchlist[walletAddress].label : '');
+                                  }
+                                }}
                                 onChange={(e) => setLabel(e.target.value)}
                               />
+
                             </p>
                           </div>
                         </div>
@@ -223,7 +235,8 @@ export default function Watchlist({ userAddress, walletAddress }: WatchlistProps
 
                           onClick={handleUpdateWatchlistEntry}
                         >
-                          Change Label
+
+                          {updateLoading ? (<>Saving..</>) : (<>Change Label</>)}
                         </button>
                       </div>
                     </Dialog.Panel>
