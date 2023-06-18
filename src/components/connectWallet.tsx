@@ -1,5 +1,6 @@
 import React from 'react';
-import { VenomConnect } from 'venom-connect';
+import { VenomConnect } from 'venom-connect'; 
+
 
 type Props = {
   venomConnect: VenomConnect | undefined;

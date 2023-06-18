@@ -1,7 +1,7 @@
 import { ArrowDownIcon, ArrowUpIcon, WalletIcon } from '@heroicons/react/20/solid'
 import { CurrencyDollarIcon, ClockIcon, StarIcon } from '@heroicons/react/24/outline'
 import LineChart from './LineChart';
-import History from './History';
+import History from './history';
 import { Transaction } from '../types/transactions.type';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react'

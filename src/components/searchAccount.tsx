@@ -165,6 +165,7 @@ export default function SearchAccount({onResultClick, address}) {
 
         </div>
       )}
+      
     </div>
   );
 };

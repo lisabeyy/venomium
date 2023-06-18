@@ -70,6 +70,7 @@ export default function History({ loading, transactions }: HistoryProps) {
             </div>
           ))}
         </>
+        
       }
 
     </div>
