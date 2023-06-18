@@ -15,7 +15,7 @@ import {
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { BrowserRouter as Router, Route, Routes, Navigate, useParams, Link, useLocation } from 'react-router-dom';
 import { initVenomConnect } from '../lib/venom';
-import Logo from '../assets/logo_venomium.svg';
+import Logo from '../assets/venomium_3.svg';
 import ConnectedIcon from '../assets/connected.svg';
 import VenomConnect from 'venom-connect';
 import ConnectWallet from '../components/ConnectWallet';
@@ -23,6 +23,7 @@ import SearchAccount from '../components/SearchAccount';
 import WatchlistService from '../lib/watchlist.api';
 import Wallet from './WalletPage';
 import Watchlist from './WatchlistPage';
+import Footer from '../components/Footer';
 
 const navigation = [
   { name: 'My Wallet', href: '/wallet', icon: HomeIcon, current: true },
@@ -225,16 +226,9 @@ function Layout() {
                             ))}
                           </ul>
                         </li>
-                        <li className="mt-auto">
-                          <a
-                            href="#"
-                            className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white"
-                          >
-                            <Cog6ToothIcon className="h-6 w-6 shrink-0" aria-hidden="true" />
-                            Settings
-                          </a>
-                        </li>
+                      
                       </ul>
+                      <Footer />
                     </nav>
                   </div>
                 </Dialog.Panel>
@@ -304,16 +298,10 @@ function Layout() {
                     ))}
                   </ul>
                 </li>
-                <li className="mt-auto">
-                  <a
-                    href="#"
-                    className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white"
-                  >
-                    <Cog6ToothIcon className="h-6 w-6 shrink-0" aria-hidden="true" />
-                    Settings
-                  </a>
-                </li>
+               
               </ul>
+
+              <Footer />
             </nav>
           </div>
         </div>

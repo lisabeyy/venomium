@@ -7,7 +7,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react'
 import { fetchAssets, fetchTransactions } from '../lib/venomScanApi';
 import { getAmountWithDecimal, retrieveImage } from '../utils/tokens.utils';
-import Logo from '../assets/logo_venomium.svg';
+import Logo from '../assets/venomium_3.svg';
 import AddToWatchlist from './AddToWatchlist';
 
 let stats = [
