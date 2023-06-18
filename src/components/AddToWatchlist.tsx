@@ -31,12 +31,15 @@ export default function AddToWatchlist({ userAddress, walletAddress }: Watchlist
   }, []);
 
   const handleAddToWatchlist = async () => {
+    setUpdateLoading(true);
     try {
       await WatchlistService.addToWatchlist(userAddress, walletAddress, label);
       setLabel('');
       setModalOpen(false);
       loadWatchlist();
+      setUpdateLoading(false);
     } catch (error) {
+      setUpdateLoading(false);
       console.error('Error adding to watchlist:', error);
     }
   };
@@ -146,7 +149,8 @@ export default function AddToWatchlist({ userAddress, walletAddress }: Watchlist
 
                           onClick={handleAddToWatchlist}
                         >
-                          Confirm
+                          
+                          {updateLoading ? (<>Saving..</>) : (<>Add to watchlist</>)}
                         </button>
                       </div>
                     </Dialog.Panel>

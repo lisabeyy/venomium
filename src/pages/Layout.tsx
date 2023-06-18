@@ -62,9 +62,13 @@ function Layout() {
     setVenomConnect(_venomConnect);
   };
   useEffect(() => {
+  
     if (params && params.address) {
       setSearchAddress(params.address);
       setAddress(params.address);
+    } else {
+      setAddress(userAddress || '');
+      setSearchAddress(userAddress || '');
     }
     init();
   }, []);
